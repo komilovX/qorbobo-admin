@@ -20,7 +20,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="Фотография">
-            <img :src="category.photo" class="mb1">
+            <img v-image="category.photo" class="mb1">
             <el-upload
               ref="uploadCategoryId"
               action="http://localhost:3000"
@@ -107,13 +107,6 @@ export default {
     handleRemove(file, fileList){
       fileList = []
     },
-    readData(f) {
-      return new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.readAsDataURL(f);
-      });
-    },
     submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
@@ -128,15 +121,8 @@ export default {
             }
             
             if (this.file) {
-              const data = await this.readData(this.file.raw);
-
-              const instance = await this.$cloudinary.upload(data, {
-                folder: 'upload',
-                uploadPreset: 'mbcobawt',
-              })
-              formData.photo = instance.secure_url
+              formData.image = this.file.raw
             }
-            
             await this.$store.dispatch('category/updateCategoryById', formData)
             this.loading = false
             this.$router.push('/menu/categories')

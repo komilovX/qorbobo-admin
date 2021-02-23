@@ -27,7 +27,7 @@
         >
           <template slot-scope="{row:{photo,name,children}}" class="ml1">
             <div class="img-part df" :class="{'ml1-5':!children}">
-              <img :src="photo" width="48" height="35" class="mr05">
+              <img v-image="photo" width="48" height="35" class="mr05">
               <span>{{name}}</span>
             </div>
           </template>

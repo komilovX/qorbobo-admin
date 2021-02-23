@@ -63,11 +63,12 @@ module.exports.acceptOrder = async (req, res) => {
 module.exports.newOrder = async (req, res) => {
   try {
     if (req.body.key == "new_order") {
-      const orders = await Orders.findAll({ where: { status: 1 }, raw: true });
-      io.emit("newOrder", orders);
+      const order = await Orders.findByPk(req.body.orderId);
+      io.emit("newOrder", order);
       res.json({ message: "recived" });
     }
   } catch (e) {
+    console.log(e);
     res.status(500).json(e);
   }
 };

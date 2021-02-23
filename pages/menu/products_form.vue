@@ -132,24 +132,11 @@ export default {
       this.imgUrl = ''
       fileList = []
     },
-    readData(f) {
-      return new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.readAsDataURL(f);
-      });
-    },
     submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid && this.file) {
           try {
             this.loading = true
-            const data = await this.readData(this.file.raw);
-
-            const instance = await this.$cloudinary.upload(data, {
-              folder: 'upload',
-              uploadPreset: 'mbcobawt',
-            })
 
             let { name } = this.$store.getters['category/categories'].find(f => f.id === this.productForm.category)
             const formData = {
@@ -159,7 +146,7 @@ export default {
               category_name: name,
               comment: this.productForm.comment,
               comment_ru: this.productForm.comment_ru,
-              photo: instance.secure_url
+              image: this.file.raw
             }
           
             await this.$store.dispatch('product/createProduct', formData)

@@ -9,9 +9,15 @@ export const mutations = {
 };
 
 export const actions = {
-  async createCategory({ commit }, formData) {
+  async createCategory({ commit }, { name, parent_category, image, name_ru }) {
     try {
-      return this.$axios.$post("api/menu/category", formData);
+      const fd = new FormData();
+      fd.append("name", name);
+      fd.append("name_ru", name_ru);
+      fd.append("parent_category", parent_category);
+      fd.append("image", image, image.name);
+
+      return this.$axios.$post("api/menu/category", fd);
     } catch (e) {
       commit("setError", e, { root: true });
       throw e;
@@ -42,9 +48,21 @@ export const actions = {
       throw e;
     }
   },
-  async updateCategoryById({ commit }, { id, ...formData }) {
+  async updateCategoryById(
+    { commit },
+    { id, name, parent_category, image = null }
+  ) {
     try {
-      return this.$axios.$put(`api/menu/category/${id}`, formData);
+      const fd = new FormData();
+      if (image) {
+        fd.append("name", name);
+        fd.append("parent_category", parent_category);
+        fd.append("image", image, image.name);
+      } else {
+        fd.append("name", name);
+        fd.append("parent_category", parent_category);
+      }
+      return this.$axios.$put(`api/menu/category/${id}`, fd);
     } catch (e) {
       commit("setError", e, { root: true });
       throw e;

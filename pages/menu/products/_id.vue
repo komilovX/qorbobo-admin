@@ -37,7 +37,7 @@
             </el-input>
           </el-form-item>
           <el-form-item label="Фотография">
-            <img :src="product.photo" class="mb1">
+            <img v-image="product.photo" class="mb1">
             <el-upload
             ref="uploadCategoryId"
             action="https://jsonplaceholder.typicode.com/posts/"
@@ -131,13 +131,6 @@ export default {
     handleRemove(file, fileList){
       fileList = []
     },
-    readData(f) {
-      return new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.readAsDataURL(f);
-      });
-    },
     submitForm(formName) {
       this.$refs[formName].validate( async (valid) => {
         if (valid) {
@@ -154,13 +147,7 @@ export default {
               comment_ru: this.productForm.comment_ru
             }
             if (this.file) {
-              const data = await this.readData(this.file.raw);
-
-              const instance = await this.$cloudinary.upload(data, {
-                folder: 'upload',
-                uploadPreset: 'mbcobawt',
-              })
-              formData.photo = instance.secure_url
+              formData.image = this.file.raw
             }
           
             await this.$store.dispatch('product/updateProductById', formData)

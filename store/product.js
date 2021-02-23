@@ -1,7 +1,15 @@
 export const actions = {
-  async createProduct({ commit }, formData) {
+  async createProduct({ commit }, form) {
     try {
-      return await this.$axios.$post("api/menu/product", formData);
+      const fd = new FormData();
+      fd.append("name", form.name);
+      fd.append("name_ru", form.name_ru);
+      fd.append("category_id", form.category_id);
+      fd.append("category_name", form.category_name);
+      fd.append("image", form.image, form.image.name);
+      fd.append("comment", form.comment);
+      fd.append("comment_ru", form.comment_ru);
+      return await this.$axios.$post("api/menu/product", fd);
     } catch (error) {
       commit("setError", error, { root: true });
       throw error;
@@ -48,9 +56,19 @@ export const actions = {
     }
   },
 
-  async updateProductById({ commit }, { id, ...formData }) {
+  async updateProductById({ commit }, form) {
     try {
-      return await this.$axios.$put(`api/menu/product/${id}`, formData);
+      const fd = new FormData();
+      fd.append("name", form.name);
+      fd.append("name_ru", form.name_ru);
+      fd.append("category_id", form.category_id);
+      fd.append("category_name", form.category_name);
+      fd.append("comment", form.comment);
+      fd.append("comment_ru", form.comment_ru);
+      if (form.image) {
+        fd.append("image", form.image, form.image.name);
+      }
+      return await this.$axios.$put(`api/menu/product/${form.id}`, fd);
     } catch (error) {
       commit("setError", error, { root: true });
       throw error;

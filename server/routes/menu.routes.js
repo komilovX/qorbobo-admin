@@ -11,6 +11,7 @@ const brand = require("../controller/brand.controller");
 router.post(
   "/category",
   passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
   ctr.createCategory
 );
 
@@ -35,6 +36,7 @@ router.get(
 router.put(
   "/category/:id",
   passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
   ctr.updateCategoryById
 );
 
@@ -55,6 +57,7 @@ router.put(
 router.post(
   "/product",
   passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
   ctr.createProduct
 );
 router.get(
@@ -71,6 +74,7 @@ router.get(
 router.put(
   "/product/:id",
   passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
   ctr.updateProductById
 );
 router.delete(

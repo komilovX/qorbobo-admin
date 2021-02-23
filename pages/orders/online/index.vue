@@ -1,7 +1,10 @@
 <template>
   <div>
-    <div class="header p1">
-      <h2>Онлайн заказы</h2>
+    <div class="header p1 df">
+      <h2 class="mr1">Онлайн заказы</h2>
+      <el-button size="small" type="success" @click="openDeliveryDialog">
+        Цена доставки
+      </el-button>
     </div>
     <el-tabs type="border-card" stretch>
       <el-tab-pane :label="`Новый заказы (${newOrders.length})`">
@@ -223,7 +226,7 @@
       </el-tab-pane>
     </el-tabs>
     <el-dialog
-      title="Xabar jo'natish"
+      title="Отправить сообщение"
       :visible.sync="dialogVisible"
       width="50%"
       id="dialog"
@@ -237,6 +240,25 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">закрыть</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="Цена доставки"
+      :visible.sync="deliveryDialog"
+      width="500px"
+    >
+      <el-form :model="deliveryForm" :rules="rules" ref="deliveryForm" label-position="top">
+        <el-form-item label="Цена доставки" prop="price">
+          <el-input type="number" v-model="deliveryForm.price" style="width: 400px" />
+        </el-form-item>
+        <el-form-item label="Лимит бесплатной доставки" prop="limit">
+          <el-input type="number" v-model="deliveryForm.limit" style="width: 400px"/>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="success" size="small" @click="submitForm('deliveryForm')">
+          Сохранить
+        </el-button>
       </span>
     </el-dialog>
   </div>
@@ -257,8 +279,28 @@ export default {
   data: () => ({
     loading: false,
     dialogVisible: false,
+    deliveryDialog: false,
     currentOrder: {},
+    deliveryForm: {
+      limit: null,
+      price: null,
+    },
+    rules:{
+        price: [
+          { required: true, message: 'Пожалуйста, введите название деятельности', trigger: 'change' },
+        ],
+        limit: [
+          { required: true, message: 'Пожалуйста, введите название деятельности', trigger: 'change' },
+        ],
+      }
   }),
+  sockets: {
+    newOrder(order) {
+      if (order) {
+        this.newOrders.push(order)
+      }
+    },
+  },
   methods: {
     formatCurrency(cost) {
       return new Intl.NumberFormat('ru').format(cost)
@@ -335,6 +377,26 @@ export default {
         } catch (e) {
           this.loading = false
           console.log(e)
+        }
+      })
+    },
+    async openDeliveryDialog() {
+      if (!this.deliveryForm.price) {
+        const delivery = await this.$store.dispatch('order/getDeliveryData')
+        this.deliveryForm.price = delivery.price
+        this.deliveryForm.limit = delivery.limit
+      }
+      this.deliveryDialog = true
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate(async (valid) => {
+        if (valid) {
+          const formData = {
+            price: this.deliveryForm.price,
+            limit: this.deliveryForm.limit
+          }
+          await this.$store.dispatch('order/updateDeliveryData', formData)
+          this.deliveryDialog = false
         }
       })
     },

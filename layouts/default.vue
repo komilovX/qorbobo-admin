@@ -10,6 +10,7 @@
         <transition name="fade-transform" mode="out-in">
           <nuxt />
         </transition>
+        <audio id="order" src="/order.mp3" muted></audio>
       </div>
     </div>
   </div>
@@ -33,14 +34,15 @@ export default {
   },
   mixins: [ResizeMixin],
   sockets: {
-    newOrder(data) {
-      const path = this.$route.path
-      if (path != '/orders/online') {
-        this.value = 'new'
+    newOrder() {
+      try{
+        document.getElementById('order').muted = false;
+        document.getElementById('order').play();
+        this.$message.success('Новый заказ')
+
+      } catch(err) {
+
       }
-      let audio = new Audio('/order.mp3')
-      audio.play()
-      this.$message.success('Новый заказ')
     },
     checkRemainder() {
       this.mValue = '1'
@@ -87,7 +89,7 @@ export default {
   },
   watch:{
     error(value) {
-      if (value.response.data.message) {
+      if (value.response && value.response.data && value.response.data.message) {
        this.$message.error(value.response.data.message)
       }
     }

@@ -104,29 +104,16 @@ export default {
       this.imgUrl = ''
       fileList = []
     },
-    readData(f) {
-      return new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.readAsDataURL(f);
-      });
-    },
     submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid && this.file) {
           this.loading = true
-          const data = await this.readData(this.file.raw);
-
-          const instance = await this.$cloudinary.upload(data, {
-            folder: 'upload',
-            uploadPreset: 'mbcobawt',
-          })
 
           const formData = {
             name: this.categoryForm.name,
             name_ru: this.categoryForm.name_ru,
             parent_category: this.categoryForm.parent_category,
-            photo: instance.secure_url
+            image: this.file.raw
           }
           try {
             await this.$store.dispatch('category/createCategory', formData)

@@ -64,6 +64,24 @@ export const actions = {
     } catch (e) {
       commit("setError", e, { root: true });
     }
+  },
+  async updateDeliveryData({ commit }, formData) {
+    try {
+      return await this.$axios.$put(`api/delivery`, formData);
+    } catch (e) {
+      commit("setError", e, { root: true });
+    }
+  },
+  async getDeliveryData() {
+    try {
+      return await this.$axios.$get(`api/delivery`);
+    } catch (e) {
+      commit("setError", e, { root: true });
+    }
+  },
+  SOCKET_newOrder({ commit }) {
+    console.log("New order client");
+    // commit('setOrder', orders)
   }
 };
 

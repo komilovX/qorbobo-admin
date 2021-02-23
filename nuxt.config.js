@@ -2,7 +2,7 @@ module.exports = {
   ssr: false,
   server: {
     port: 3000
-    // host: '207.154.223.158'
+    // host: "127.0.0.1"
   },
   head: {
     title: process.env.npm_package_name || "",
@@ -35,25 +35,13 @@ module.exports = {
     "@/plugins/element-ui",
     "@/plugins/imgDirective",
     "@/plugins/nuxt-client-init.js",
+    "@/plugins/socket.js",
     "@/plugins/axios"
   ],
 
   buildModules: [],
 
-  modules: [
-    "@nuxtjs/axios",
-    "@nuxtjs/pwa",
-    "@nuxtjs/svg",
-    "@nuxtjs/dotenv",
-    "@nuxtjs/cloudinary"
-  ],
-
-  cloudinary: {
-    cloudName: "dxgnlhirv",
-    apiKey: "651258586889846",
-    apiSecret: "process.env.API_SECRET"
-  },
-
+  modules: ["@nuxtjs/axios", "@nuxtjs/pwa", "@nuxtjs/svg", "@nuxtjs/dotenv"],
   env: {
     limit: 30,
     baseUrl: "http://localhost:3000",
