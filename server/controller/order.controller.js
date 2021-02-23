@@ -1,4 +1,6 @@
 const Orders = require("../models/orders.model");
+const axios = require("axios");
+const keys = require("../keys");
 // api/orders
 
 module.exports.getAllOrder = async (req, res) => {
@@ -55,8 +57,14 @@ module.exports.acceptOrder = async (req, res) => {
       },
       { where: { id: +req.params.id } }
     );
+    const text = encodeURI("Ваш заказ оформлен");
+    axios.post(
+      `https://api.telegram.org/bot${keys.TOKEN}/sendMessage?chat_id=${req.body.chat_id}&text=${text}`
+    );
+
     res.json({ messages: "changed!" });
   } catch (e) {
+    console.log(e);
     res.status(500).json(e);
   }
 };

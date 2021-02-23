@@ -278,7 +278,14 @@ export default {
       .then(async () => {
         try {
           this.processLoading = true
-          await this.$store.dispatch('order/acceptOrder',{id: this.$route.params.id, status: 'active', total: this.total, products: JSON.stringify(this.ordered_products) })
+          const formData = {
+            id: this.$route.params.id, 
+            status: 'active', 
+            total: this.total, 
+            products: JSON.stringify(this.ordered_products),
+            chat_id: this.order.chat_id
+          }
+          await this.$store.dispatch('order/acceptOrder', formData)
           await this.$store.dispatch('supply/changeResidue', JSON.stringify(this.ordered_products))
           this.$message.success("заказ подтвержден")
           this.$router.push('/orders/online')
