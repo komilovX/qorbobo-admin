@@ -5,7 +5,7 @@ module.exports = {
     // host: "127.0.0.1"
   },
   head: {
-    title: process.env.npm_package_name || "",
+    title: "Fruteacorp Bot",
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },

@@ -5,6 +5,9 @@
       <el-button size="small" type="success" @click="openDeliveryDialog">
         Цена доставки
       </el-button>
+      <el-button size="small" type="success" @click="openDeliveryTimeDialog">
+        Время доставки
+      </el-button>
     </div>
     <el-tabs type="border-card" stretch>
       <el-tab-pane :label="`Новый заказы (${newOrders.length})`">
@@ -261,10 +264,19 @@
         </el-button>
       </span>
     </el-dialog>
+    <delivery-time-dialog 
+      :times="deliveryTimes" 
+      :visible="deliveryTimeDialog" 
+      @close="deliveryTimeDialog = false" 
+      @created="deliveryTimes.push($event)"
+      @deleted="deleteDeliveryTimeItem($event)"
+    />
   </div>
 </template>
 <script>
+import DeliveryTimeDialog from '../../../components/DeliveryTimeDialog.vue'
 export default {
+  components: { DeliveryTimeDialog },
   async asyncData({store, error}) {
     try {
       const orders = await store.dispatch('order/getAllOrder')
@@ -280,6 +292,8 @@ export default {
     loading: false,
     dialogVisible: false,
     deliveryDialog: false,
+    deliveryTimeDialog: false,
+    deliveryTimes: [],
     currentOrder: {},
     deliveryForm: {
       limit: null,
@@ -387,6 +401,18 @@ export default {
         this.deliveryForm.limit = delivery.limit
       }
       this.deliveryDialog = true
+    },
+    deleteDeliveryTimeItem(id) {
+      const index = this.deliveryTimes.findIndex(item => item.id == id)
+      if (index !== -1) {
+        this.deliveryTimes.splice(index, 1)
+      }
+    },
+    async openDeliveryTimeDialog() {
+      if (!this.deliveryTimes.length) {
+        this.deliveryTimes = await this.$store.dispatch('order/getDeliveryTime')
+      }
+      this.deliveryTimeDialog = true
     },
     submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {

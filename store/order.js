@@ -68,16 +68,33 @@ export const actions = {
       commit("setError", e, { root: true });
     }
   },
-  async getDeliveryData() {
+  async getDeliveryData({ commit }) {
     try {
       return await this.$axios.$get(`api/delivery`);
     } catch (e) {
       commit("setError", e, { root: true });
     }
   },
-  SOCKET_newOrder({ commit }) {
-    console.log("New order client");
-    // commit('setOrder', orders)
+  async getDeliveryTime({ commit }) {
+    try {
+      return await this.$axios.$get(`api/delivery/time`);
+    } catch (e) {
+      commit("setError", e, { root: true });
+    }
+  },
+  async createDeliveryTime({ commit }, data) {
+    try {
+      return await this.$axios.$post(`api/delivery/time`, data);
+    } catch (e) {
+      commit("setError", e, { root: true });
+    }
+  },
+  async deleteDeliveryTime({ commit }, id) {
+    try {
+      return await this.$axios.$delete(`api/delivery/time/${id}`);
+    } catch (e) {
+      commit("setError", e, { root: true });
+    }
   }
 };
 

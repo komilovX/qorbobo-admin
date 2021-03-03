@@ -30,6 +30,9 @@ const Orders = sequelize.define("orders", {
     type: Sequelize.FLOAT,
     defaultValue: 9000
   },
+  delivery_time: {
+    type: Sequelize.STRING
+  },
   total: {
     type: Sequelize.FLOAT,
     defaultValue: 0
