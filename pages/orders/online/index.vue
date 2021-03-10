@@ -5,9 +5,6 @@
       <el-button size="small" type="success" @click="openDeliveryDialog">
         Цена доставки
       </el-button>
-      <el-button size="small" type="success" @click="openDeliveryTimeDialog">
-        Время доставки
-      </el-button>
     </div>
     <el-tabs type="border-card" stretch>
       <el-tab-pane :label="`Новый заказы (${newOrders.length})`">
@@ -191,34 +188,48 @@
               </template>
             </el-table-column>
             <el-table-column
-            width="300"
-            label="Имя"
-            prop="clientName"
-            align="center"
-            show-overflow-tooltip
+              width="200"
+              label="Имя"
+              prop="clientName"
+              align="center"
+              show-overflow-tooltip
             />
             <el-table-column
-            width="200"
-            prop="orderType"
-            align="center"
-            label="Тип платежа"
+              width="150"
+              prop="orderType"
+              align="center"
+              label="Тип платежа"
             />
             <el-table-column
+              min-width="200"
               label="Управлять"
               align="center"
             >
-              <template slot-scope="{row: {id}}">
-                <el-button @click="printMe(id)" type="primary" plain icon="el-icon-printer" size="small"/>
+              <template slot-scope="{row: {id}, $index}">
+                <el-button
+                  type="text"
+                  size="small"
+                  @click="openDeliverDialog($index)"
+                >
+                  Отправить курьеру
+                </el-button>
+                <el-button 
+                  @click="printMe(id)" 
+                  type="primary" 
+                  plain 
+                  icon="el-icon-printer" 
+                  size="mini"
+                />
                 <el-button
                   type="primary"
-                  size="small"
+                  size="mini"
                   @click="openDialog(id)"
                 >
-                инфо
+                  инфо
                 </el-button>
                 <el-button
                   type="success"
-                  size="small"
+                  size="mini"
                   @click="addToDelivered(id)"
                 >
                   доставлена
@@ -271,6 +282,26 @@
       @created="deliveryTimes.push($event)"
       @deleted="deleteDeliveryTimeItem($event)"
     />
+    <el-dialog
+      title="Отправить курьеру"
+      :visible.sync="deliverDialog"
+      width="500px"
+    >
+      <el-select v-model="deliver" style="min-width: 80%">
+        <el-option 
+          v-for="s in delivers" 
+          :disabled="!s.chat_id" 
+          :key="s.id" 
+          :label="s.name" 
+          :value="s.chat_id" 
+        />
+      </el-select>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="success" size="small" @click="sendToDeliver">
+          Отправить
+        </el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -292,6 +323,7 @@ export default {
     loading: false,
     dialogVisible: false,
     deliveryDialog: false,
+    deliverDialog: false,
     deliveryTimeDialog: false,
     deliveryTimes: [],
     currentOrder: {},
@@ -299,6 +331,8 @@ export default {
       limit: null,
       price: null,
     },
+    deliver: null,
+    order: null,
     rules:{
         price: [
           { required: true, message: 'Пожалуйста, введите название деятельности', trigger: 'change' },
@@ -306,7 +340,7 @@ export default {
         limit: [
           { required: true, message: 'Пожалуйста, введите название деятельности', trigger: 'change' },
         ],
-      }
+    }
   }),
   sockets: {
     newOrder(order) {
@@ -414,6 +448,37 @@ export default {
       }
       this.deliveryTimeDialog = true
     },
+    async openDeliverDialog(index) {
+      if (!this.delivers.length) {
+        await this.$store.dispatch('delivers/fetchDelivers')
+      }
+      this.order = this.activeOrders[index]
+      this.deliverDialog = true
+    },
+    async sendToDeliver() {
+      if (this.deliver) {
+        const { id, date, products, delivery, total, clientPhone, clientName, address, orderType} = this.order
+        const productsString = JSON.parse(products).map(p => {
+          return `\n${p.name}\n${p.amount} x ${p.price} = ${this.formatCurrency(p.amount*p.price)}\n`
+        }).join('')
+        const productInfo = `Товары:${productsString}\nДоставка: ${delivery} сум\nИтого: ${this.formatCurrency(total)}`
+        const clientInfo = `Имя: ${clientName}\nТелефон: ${clientPhone}\nАдрес: ${address}\nСпособ оплаты: ${orderType}\n`
+        const orderinfo = `№-${id}\nДата: ${this.formaterDate(date)}\n${clientInfo}\n${productInfo}`
+        try {
+          const formData = {
+            text: orderinfo,
+            chat_id: this.deliver
+          }
+          await this.$store.dispatch('delivers/sendToDeliver', formData)
+          this.deliverDialog = false
+          this.$message.success("сообщения отправлена")
+        } catch (error) {
+          console.log('error', error)
+        }
+      } else {
+        this.$message.error('Выберите курьера')
+      }
+    },
     submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
@@ -442,7 +507,10 @@ export default {
   computed: {
     ioOrder() {
       return this.$store.getters['order/orders']
-    }
+    },
+    delivers() {
+      return this.$store.getters['delivers/delivers']
+    },
   },
   watch:{
     ioOrder(val) {

@@ -18,7 +18,6 @@
                 <div><strong>Телефон клиента: </strong>{{order.clientPhone}}</div>
                 <div><strong>Оплата: </strong>{{order.orderType}}</div>
                 <div><strong>Система: </strong>{{order.system}}</div>
-                <div><strong>Время доставки: </strong>{{order.delivery_time}}</div>
                 <div><strong>Адрес клиента: </strong>{{order.address}}</div>
               </div>
               <div class="bottom clearfix mb1" style="float: right" v-if="order.status === 'new'">

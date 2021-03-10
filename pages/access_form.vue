@@ -72,30 +72,30 @@ export default {
     return false
   },
   methods:{
-  submitForm(formName) {
-    this.$refs[formName].validate(async (valid) => {
-      if (valid) {
-        const formData = {
-          name: this.employerForm.name,
-          login: this.employerForm.login,
-          password: this.employerForm.password,
-          role: this.employerForm.role
+    submitForm(formName) {
+      this.$refs[formName].validate(async (valid) => {
+        if (valid) {
+          const formData = {
+            name: this.employerForm.name,
+            login: this.employerForm.login,
+            password: this.employerForm.password,
+            role: this.employerForm.role
+          }
+          this.loading = true
+          try {
+            await this.$store.dispatch('auth/create', formData)
+            this.loading = false
+            this.$message.success('сотрудник успешна добавлена')
+            this.$router.push('/access')
+          } catch (e) {
+            this.loading = false
+            console.log(e)
+          }
+        } else {
+          return false;
         }
-        this.loading = true
-        try {
-          await this.$store.dispatch('auth/create', formData)
-          this.loading = false
-          this.$message.success('сотрудник успешна добавлена')
-          this.$router.push('/access')
-        } catch (e) {
-          this.loading = false
-          console.log(e)
-        }
-      } else {
-        return false;
-      }
-    });
-    },
+      });
+      },
   },
 }
 </script>
