@@ -47,6 +47,21 @@ module.exports.changeStatus = async (req, res) => {
     res.status(500).json(e);
   }
 };
+
+module.exports.changeToOrderSended = async (req, res) => {
+  try {
+    await Orders.update(
+      {
+        isSended: true
+      },
+      { where: { id: +req.params.id } }
+    );
+    res.json({ messages: "changed!" });
+  } catch (e) {
+    res.status(500).json(e);
+  }
+};
+
 module.exports.acceptOrder = async (req, res) => {
   try {
     await Orders.update(

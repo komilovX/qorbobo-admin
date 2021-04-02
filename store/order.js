@@ -46,6 +46,16 @@ export const actions = {
       throw e;
     }
   },
+
+  async changeToDelivered({ commit }, id) {
+    try {
+      return this.$axios.$put(`api/orders/orderSended/${id}`);
+    } catch (e) {
+      commit("setError", e, { root: true });
+      throw e;
+    }
+  },
+
   async acceptOrder({ commit }, { id, ...formData }) {
     try {
       return this.$axios.$put(`api/orders/accept/${id}`, formData);

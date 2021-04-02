@@ -78,6 +78,7 @@ module.exports.updateCategoryById = async (req, res) => {
       await Category.update(
         {
           name: req.body.name,
+          name_ru: req.body.name_ru,
           parent_category: req.body.parent_category
         },
         { where: { id: req.params.id } }
@@ -91,6 +92,7 @@ module.exports.updateCategoryById = async (req, res) => {
       await Category.update(
         {
           name: req.body.name,
+          name_ru: req.body.name_ru,
           photo: req.file.filename,
           parent_category: req.body.parent_category
         },
@@ -172,6 +174,7 @@ module.exports.updateProductById = async (req, res) => {
       await Product.update(
         {
           name: req.body.name,
+          name_ru: req.body.name_ru,
           category_name: req.body.category_name,
           category_id: req.body.category_id,
           brand: req.body.brand,
@@ -187,6 +190,7 @@ module.exports.updateProductById = async (req, res) => {
       await Product.update(
         {
           name: req.body.name,
+          name_ru: req.body.name_ru,
           category_name: req.body.category_name,
           category_id: req.body.category_id,
           brand: req.body.brand,

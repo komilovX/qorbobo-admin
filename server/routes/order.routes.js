@@ -1,48 +1,51 @@
-const { Router } = require('express');
-const router = Router()
+const { Router } = require("express");
+const router = Router();
 
-const passport = require('passport');
-const pagination = require('../middleware/pagination');
+const passport = require("passport");
+const pagination = require("../middleware/pagination");
 
-const ctr = require('../controller/order.controller');
+const ctr = require("../controller/order.controller");
 // api/orders/
 router.get(
-  '/',
-  passport.authenticate('jwt',{session:false}),
+  "/",
+  passport.authenticate("jwt", { session: false }),
   ctr.getAllOrder
-)
+);
 router.get(
-  '/canceled',
-  passport.authenticate('jwt',{session:false}),
-  pagination('canceledOrders'),
+  "/canceled",
+  passport.authenticate("jwt", { session: false }),
+  pagination("canceledOrders"),
   ctr.getAllCanceledOrders
-)
+);
 router.get(
-  '/delivered',
-  passport.authenticate('jwt',{session:false}),
-  pagination('deliveredOrders'),
+  "/delivered",
+  passport.authenticate("jwt", { session: false }),
+  pagination("deliveredOrders"),
   ctr.getAllDeliveredOrders
-)
+);
 router.get(
-  '/:id',
-  passport.authenticate('jwt',{session:false}),
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
   ctr.findById
-)
+);
 
 router.put(
-  '/:id',
-  passport.authenticate('jwt',{session:false}),
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
   ctr.changeStatus
-)
+);
+
 router.put(
-  '/accept/:id',
-  passport.authenticate('jwt',{session:false}),
+  "/orderSended/:id",
+  passport.authenticate("jwt", { session: false }),
+  ctr.changeToOrderSended
+);
+
+router.put(
+  "/accept/:id",
+  passport.authenticate("jwt", { session: false }),
   ctr.acceptOrder
-)
-router.post(
-  '/new_order',
-  ctr.newOrder
-)
+);
+router.post("/new_order", ctr.newOrder);
 
-
-module.exports = router
+module.exports = router;

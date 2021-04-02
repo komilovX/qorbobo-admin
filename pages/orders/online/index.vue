@@ -119,10 +119,11 @@
         <el-table
           :data="activeOrders"
           :header-row-class-name="rowClassName"
+          :row-class-name="tableRowClassName"
           tooltip-effect="light"
           style="width: 100%"
           size="medium"
-          >
+        >
           <el-table-column type="expand">
             <template slot-scope="{row}">
               <el-table
@@ -457,7 +458,12 @@ export default {
     },
     async sendToDeliver() {
       if (this.deliver) {
-        const { id, date, products, delivery, total, clientPhone, clientName, address, orderType} = this.order
+        const { 
+          id, date, products, delivery, 
+          total, clientPhone, clientName,
+          address, orderType, latitude,longitude
+        } = this.order
+        
         const productsString = JSON.parse(products).map(p => {
           return `\n${p.name}\n${p.amount} x ${p.price} = ${this.formatCurrency(p.amount*p.price)}\n`
         }).join('')
@@ -467,9 +473,12 @@ export default {
         try {
           const formData = {
             text: orderinfo,
-            chat_id: this.deliver
+            chat_id: this.deliver,
+            latitude,
+            longitude,
           }
           await this.$store.dispatch('delivers/sendToDeliver', formData)
+          await this.$store.dispatch('order/changeToDelivered', id)
           this.deliverDialog = false
           this.$message.success("сообщения отправлена")
         } catch (error) {
@@ -493,6 +502,12 @@ export default {
     },
     rowClassName({row, rowIndex}) {
       return 'table-header'
+    },
+    tableRowClassName({row, rowIndex}) {
+      if (row.isSended) {
+        return 'sended-row';
+      }
+      return '';
     },
 
   },
@@ -523,6 +538,9 @@ export default {
   .el-table .table-header {
     color:#999999;
     font-size: 12px;
+  }
+  .el-table .sended-row {
+    background-color: #e2ffd2;;
   }
 </style>
 <style scoped lang="scss">

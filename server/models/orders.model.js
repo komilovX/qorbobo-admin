@@ -41,6 +41,12 @@ const Orders = sequelize.define("orders", {
   status: {
     type: Sequelize.STRING,
     defaultValue: "new"
-  }
+  },
+  isSended: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
+  },
+  latitude: Sequelize.FLOAT,
+  longitude: Sequelize.FLOAT
 });
 module.exports = Orders;

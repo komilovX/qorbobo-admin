@@ -117,7 +117,7 @@ export default {
               id: this.$route.params.id,
               name: this.categoryForm.name,
               name_ru: this.categoryForm.name_ru,
-              category: this.categoryForm.category,
+              parent_category: this.categoryForm.category,
             }
             
             if (this.file) {

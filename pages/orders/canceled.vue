@@ -4,7 +4,7 @@
       <h2>Отмененные заказы</h2>
     </div>
         <el-table
-          v-loading="loading2"
+          v-loading="loading"
           :data="orders"
           tooltip-effect="light"
           style="width: 100%"
@@ -86,12 +86,12 @@
         >
           <template slot-scope="{row: {id}}">
             <el-button
-            type="primary"
-            size="small"
-            @click="openDialog(id)"
-            class="mr1"
+              type="primary"
+              size="small"
+              @click="openDialog(id)"
+              class="mr1"
             >
-            инфо
+              инфо
             </el-button>
           </template>
         </el-table-column>
@@ -137,11 +137,11 @@ export default {
   methods: {
     async currentChange(val) {
       try {
-        this.loading2 = true
+        this.loading = true
         const {data, size} = await this.$store.dispatch('order/getAllCanceledOrders',{page: val, limit: 30})
         this.orders = data
         this.size = size
-        this.loading2 = false
+        this.loading = false
       } catch (e) {
         this.loading = false
         console.log(e)

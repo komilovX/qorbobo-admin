@@ -4,7 +4,7 @@
       <h2>Доставление заказы</h2>
     </div>
         <el-table
-          v-loading="loading2"
+          v-loading="loading"
           :data="orders"
           tooltip-effect="light"
           style="width: 100%"
@@ -129,7 +129,6 @@ export default {
   },
   data: () => ({
     loading: false,
-    loading2: false,
     dialogVisible: false,
     currentOrder: {},
   }),
@@ -137,7 +136,7 @@ export default {
   methods: {
     async currentChange(val) {
       try {
-        this.loading2 = true
+        this.loading = true
         const {data, size} = await this.$store.dispatch('order/getAllDeliveredOrders',{page: val, limit: 50})
         this.orders = data
         this.size = size

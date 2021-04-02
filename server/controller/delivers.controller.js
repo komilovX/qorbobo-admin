@@ -67,6 +67,9 @@ module.exports.sendMessage = async (req, res) => {
     await axios.post(
       `https://api.telegram.org/bot${keys.TOKEN_DELIVER}/sendMessage?chat_id=${req.body.chat_id}&text=${text}`
     );
+    await axios.post(
+      `https://api.telegram.org/bot${keys.TOKEN_DELIVER}/sendLocation?chat_id=${req.body.chat_id}&latitude=${req.body.latitude}&longitude=${req.body.longitude}`
+    );
 
     res.json({ message: "sended!" });
   } catch (error) {

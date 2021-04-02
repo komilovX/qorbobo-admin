@@ -10,7 +10,7 @@
           <el-form-item label="Название" prop="name" >
             <el-input type="text" v-model="productForm.name" class="maxW35"></el-input>
           </el-form-item>
-          <el-form-item label="Название" prop="name_ru" >
+          <el-form-item label="Название RU" prop="name_ru" >
             <el-input type="text" v-model="productForm.name_ru" class="maxW35"></el-input>
           </el-form-item>
           <el-form-item label="Категория" prop="category">
