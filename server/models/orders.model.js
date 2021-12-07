@@ -3,7 +3,7 @@ const sequelize = require("../database");
 
 const Orders = sequelize.define("orders", {
   date: {
-    type: Sequelize.DATEONLY,
+    type: Sequelize.DATE,
     defaultValue: new Date()
   },
   chat_id: {
@@ -43,6 +43,10 @@ const Orders = sequelize.define("orders", {
     defaultValue: "new"
   },
   isSended: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
+  },
+  isPaid: {
     type: Sequelize.BOOLEAN,
     defaultValue: false
   },

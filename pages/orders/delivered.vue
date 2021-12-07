@@ -13,10 +13,10 @@
           <el-table-column type="expand">
             <template slot-scope="{row}">
               <el-table
-              :data="JSON.parse(row.products)"
-              tooltip-effect="light"
-              :header-row-class-name="rowClassName"
-              style="width: 100%"
+                :data="JSON.parse(row.products)"
+                tooltip-effect="light"
+                :header-row-class-name="rowClassName"
+                style="width: 100%"
               >
                 <el-table-column
                 prop="name"

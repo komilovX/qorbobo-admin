@@ -5,7 +5,7 @@ const keys = require("../keys");
 
 module.exports.getAllOrder = async (req, res) => {
   try {
-    const orders = await Orders.findAll({ raw: true });
+    const orders = await Orders.findAll({ raw: true, order: [["id", "DESC"]] });
     res.json(orders);
   } catch (e) {
     res.status(500).json(e);
