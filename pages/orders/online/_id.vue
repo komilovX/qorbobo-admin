@@ -84,7 +84,6 @@
                       class="el-icon-delete-solid"
                       id="delete"
                       @click="deleteItem(row)"
-                      0
                       v-if="ordered_products.length != 1"
                     />
                   </template>
