@@ -11,18 +11,27 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   ctr.getAllOrder
 );
+
 router.get(
   "/canceled",
   passport.authenticate("jwt", { session: false }),
   pagination("canceledOrders"),
   ctr.getAllCanceledOrders
 );
+
 router.get(
   "/delivered",
   passport.authenticate("jwt", { session: false }),
   pagination("deliveredOrders"),
   ctr.getAllDeliveredOrders
 );
+
+router.get(
+  "/get-product-report",
+  passport.authenticate("jwt", { session: false }),
+  ctr.getOrderReportByProduct
+);
+
 router.get(
   "/:id",
   passport.authenticate("jwt", { session: false }),

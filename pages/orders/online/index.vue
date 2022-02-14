@@ -133,7 +133,12 @@
             prop="orderType"
             align="center"
             label="Тип платежа"
-          />
+          >
+            <template slot-scope="{ row: { orderType } }">
+              <span v-if="orderType === 'payme'">💳 Payme</span>
+              <span v-else>💵 Наличные</span>
+            </template>
+          </el-table-column>
           <el-table-column min-width="200" label="Управлять" align="center">
             <template slot-scope="{ row: { id }, $index }">
               <el-button
@@ -306,7 +311,7 @@ export default {
     },
     formaterDate(date) {
       return moment(date)
-        .add(5, "hours")
+        // .add(5, "hours")
         .format("DD.MM.YYYY HH:mm");
     },
     goToId(id) {

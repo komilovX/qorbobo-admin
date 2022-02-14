@@ -63,7 +63,12 @@
         prop="orderType"
         align="center"
         label="Тип платежа"
-      />
+      >
+        <template slot-scope="{ row: { orderType } }">
+          <span v-if="orderType === 'payme'">💳 Payme</span>
+          <span v-else>💵 Наличные</span>
+        </template>
+      </el-table-column>
       <el-table-column label="Управлять" align="center">
         <template slot-scope="{ row: { id } }">
           <el-button

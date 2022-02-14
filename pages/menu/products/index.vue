@@ -2,7 +2,7 @@
   <div>
     <div class="header df-sb p1 bb">
       <h2>Товары</h2>
-      <el-button type="success" size="medium" @click="goToForm()">Добавить</el-button>
+      <el-button type="success" size="small" @click="goToForm()">Добавить</el-button>
     </div>
     <div class="p1 search">
       <el-input

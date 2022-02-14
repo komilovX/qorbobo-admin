@@ -14,6 +14,8 @@ export const navlinks = [
   { name: "Остатки", path: "/calculation" },
   { name: "Клиенты", path: "/users", icon: "el-icon-user" },
   { name: "Курьеры", path: "/delivers", icon: "el-icon-truck" },
+  { name: "Отчеты", path: "/reports", icon: "el-icon-s-marketing" },
+  { name: "Отчет по продуктам", path: "/product-reports" },
   { name: "Все клиенты", path: "/all_users" },
   { name: "Активные Клиенты", path: "/active" },
   { name: "Доступ", path: "/access", icon: "el-icon-unlock" },
@@ -57,6 +59,8 @@ export const routes = [
     icon: "el-icon-s-promotion",
     origin: "/delivers"
   },
+  { name: "Отчеты", path: "/reports",  hidden: true },
+  { name: "Отчет по продуктам", path: "/product-reports", origin: "/reports/product-reports" },
   { name: "Клиенты", path: "/users", icon: "el-icon-user-solid", hidden: true },
   { name: "Все клиенты", path: "/all_users", origin: "/users/all_users" },
   { name: "Активные Клиенты", path: "/active", origin: "/users/active" },
@@ -97,6 +101,7 @@ export const sortlinks = [
   { path: "/storage" },
   { path: "/delivers" },
   { path: "/users" },
+  { path: "/reports" },
   { path: "/send_message" },
   { path: "/access" }
 ];

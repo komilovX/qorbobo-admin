@@ -65,9 +65,7 @@ export default {
   middleware: ['admin-auth'],
   async asyncData({store, route}) {
     try {
-      if (store.getters['category/categories'].length == 0) {
-        await store.dispatch('category/findAllCategories')
-      }
+      await store.dispatch('category/findAllCategories')
       const product = await store.dispatch('product/findProductById', route.params.id)
       return { product }
     } catch (error) {

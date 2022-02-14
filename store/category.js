@@ -54,13 +54,11 @@ export const actions = {
   ) {
     try {
       const fd = new FormData();
+      fd.append("name", name);
+      fd.append("name_ru", name_ru);
+      fd.append("parent_category", parent_category);
       if (image) {
-        fd.append("name", name);
-        fd.append("parent_category", parent_category);
         fd.append("image", image, image.name);
-      } else {
-        fd.append("name_ru", name_ru);
-        fd.append("parent_category", parent_category);
       }
       return this.$axios.$put(`api/menu/category/${id}`, fd);
     } catch (e) {

@@ -129,7 +129,7 @@ export default {
       cursor: pointer;
       width: 30px;
       height: 30px;
-      margin: 0 1rem;
+      margin-right: 1rem;
       margin-top: 15px;
     }
     .bell-avatar {

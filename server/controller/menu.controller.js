@@ -181,6 +181,7 @@ module.exports.updateProductById = async (req, res) => {
           brand_id: req.body.brand_id,
           barcode: req.body.barcode,
           comment: req.body.comment,
+          comment_ru: req.body.comment_ru,
           photo: req.file.filename
         },
         { where: { id: req.params.id } }
@@ -196,7 +197,8 @@ module.exports.updateProductById = async (req, res) => {
           brand: req.body.brand,
           brand_id: req.body.brand_id,
           barcode: req.body.barcode,
-          comment: req.body.comment
+          comment: req.body.comment,
+          comment_ru: req.body.comment_ru
         },
         { where: { id: req.params.id } }
       );

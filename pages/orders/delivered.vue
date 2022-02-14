@@ -41,8 +41,8 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                label="Общая сумма"
-                align="right"
+                  label="Общая сумма"
+                  align="right"
                 >
                   <template slot-scope="{row: {price, amount}}">
                     {{ formatCurrency(price*amount) }}
@@ -75,11 +75,16 @@
         show-overflow-tooltip
         />
         <el-table-column
-        width="200"
-        prop="orderType"
-        align="center"
-        label="Тип платежа"
-        />
+            width="200"
+            prop="orderType"
+            align="center"
+            label="Тип платежа"
+        >
+          <template slot-scope="{ row: { orderType } }">
+            <span v-if="orderType === 'payme'">💳 Payme</span>
+            <span v-else>💵 Наличные</span>
+          </template>
+        </el-table-column>
         <el-table-column
           label="Управлять"
           align="center"
@@ -91,7 +96,7 @@
             @click="openDialog(id)"
             class="mr1"
             >
-            инфо
+              инфо
             </el-button>
           </template>
         </el-table-column>

@@ -1,6 +1,7 @@
 const Orders = require("../models/orders.model");
 const axios = require("axios");
 const keys = require("../keys");
+const Op = require("sequelize").Op;
 // api/orders
 
 module.exports.getAllOrder = async (req, res) => {
@@ -92,6 +93,38 @@ module.exports.newOrder = async (req, res) => {
     }
   } catch (e) {
     console.log(e);
+    res.status(500).json(e);
+  }
+};
+
+module.exports.getOrderReportByProduct = async (req, res) => {
+  try {
+    const date = new Date();
+    let { dateFrom, dateTo } = req.query;
+    if (!dateFrom || dateFrom == "undefined") {
+      dateFrom = new Date(date.getFullYear(), date.getMonth(), 1);
+    }
+    if (!dateTo || dateTo == "undefined") {
+      dateTo = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    }
+    const orders = await Orders.findAll({ 
+      raw: true, 
+      where: { 
+        status: "delivered",
+        createdAt: {
+          [Op.lte]: dateTo,
+          [Op.gte]: dateFrom
+        }
+      },
+      attributes: ['id', 'products', 'createdAt'],
+    });
+    const data = {
+      content: orders,
+      dateFrom,
+      dateTo
+    }
+    res.json(data);
+  } catch (e) {
     res.status(500).json(e);
   }
 };
