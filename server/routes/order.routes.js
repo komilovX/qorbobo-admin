@@ -33,6 +33,18 @@ router.get(
 );
 
 router.get(
+  "/get-order-report",
+  passport.authenticate("jwt", { session: false }),
+  ctr.getOrderReports
+);
+
+router.get(
+  "/get-client-report",
+  passport.authenticate("jwt", { session: false }),
+  ctr.getOrderReportsByClient
+);
+
+router.get(
   "/:id",
   passport.authenticate("jwt", { session: false }),
   ctr.findById

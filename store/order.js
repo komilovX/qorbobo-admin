@@ -50,6 +50,28 @@ export const actions = {
     }
   },
 
+  async getOrderReportByClient({ commit }, { dateFrom, dateTo }) {
+    try {
+      return this.$axios.$get(
+        `api/orders/get-client-report?dateFrom=${dateFrom}&dateTo=${dateTo}`
+      );
+    } catch (e) {
+      commit("setError", e, { root: true });
+      throw e;
+    }
+  },
+
+  async getOrderReports({ commit }, { dateFrom, dateTo }) {
+    try {
+      return this.$axios.$get(
+        `api/orders/get-order-report?dateFrom=${dateFrom}&dateTo=${dateTo}`
+      );
+    } catch (e) {
+      commit("setError", e, { root: true });
+      throw e;
+    }
+  },
+
   async changeStatus({ commit }, { id, status }) {
     try {
       return this.$axios.$put(`api/orders/${id}`, { status });

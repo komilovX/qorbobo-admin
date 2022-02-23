@@ -128,3 +128,67 @@ module.exports.getOrderReportByProduct = async (req, res) => {
     res.status(500).json(e);
   }
 };
+
+module.exports.getOrderReports = async (req, res) => {
+  try {
+    const date = new Date();
+    let { dateFrom, dateTo } = req.query;
+    if (!dateFrom || dateFrom == "undefined") {
+      dateFrom = new Date(date.getFullYear(), date.getMonth(), 1);
+    }
+    if (!dateTo || dateTo == "undefined") {
+      dateTo = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    }
+    const orders = await Orders.findAll({ 
+      raw: true, 
+      where: { 
+        status: "delivered",
+        createdAt: {
+          [Op.lte]: dateTo,
+          [Op.gte]: dateFrom
+        }
+      },
+      attributes: ['id', 'products', 'orderType', 'createdAt'],
+    });
+    const data = {
+      content: orders,
+      dateFrom,
+      dateTo
+    }
+    res.json(data);
+  } catch (e) {
+    res.status(500).json(e);
+  }
+};
+
+module.exports.getOrderReportsByClient = async (req, res) => {
+  try {
+    const date = new Date();
+    let { dateFrom, dateTo } = req.query;
+    if (!dateFrom || dateFrom == "undefined") {
+      dateFrom = new Date(date.getFullYear(), date.getMonth(), 1);
+    }
+    if (!dateTo || dateTo == "undefined") {
+      dateTo = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    }
+    const orders = await Orders.findAll({ 
+      raw: true, 
+      where: { 
+        status: "delivered",
+        createdAt: {
+          [Op.lte]: dateTo,
+          [Op.gte]: dateFrom
+        }
+      },
+      attributes: ['id', 'products', 'clientName', 'clientPhone', 'createdAt'],
+    });
+    const data = {
+      content: orders,
+      dateFrom,
+      dateTo
+    }
+    res.json(data);
+  } catch (e) {
+    res.status(500).json(e);
+  }
+};
