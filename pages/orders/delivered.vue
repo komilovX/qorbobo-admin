@@ -9,7 +9,7 @@
           tooltip-effect="light"
           style="width: 100%"
           size="medium"
-          >
+        >
           <el-table-column type="expand">
             <template slot-scope="{row}">
               <el-table
@@ -50,35 +50,35 @@
                 </el-table-column>
               </el-table>
           </template>
-        </el-table-column>
+          </el-table-column>
         <el-table-column
-        width="100"
-        prop="id"
-        label="ID"
+          width="100"
+          prop="id"
+          label="ID"
         />
         <el-table-column
           sortable
           width="200"
           label="Дата"
           align="center"
-          >
+        >
           <template slot-scope="{row: {date} }">
             <i class="el-icon-time"></i>
             {{ formaterDate(date) }}
           </template>
         </el-table-column>
         <el-table-column
-        width="300"
-        label="Имя"
-        prop="clientName"
-        align="center"
-        show-overflow-tooltip
+          width="300"
+          label="Имя"
+          prop="clientName"
+          align="center"
+          show-overflow-tooltip
         />
         <el-table-column
-            width="200"
-            prop="orderType"
-            align="center"
-            label="Тип платежа"
+          width="200"
+          prop="orderType"
+          align="center"
+          label="Тип платежа"
         >
           <template slot-scope="{ row: { orderType } }">
             <span v-if="orderType === 'payme'">💳 Payme</span>
@@ -91,10 +91,10 @@
         >
           <template slot-scope="{row: {id}}">
             <el-button
-            type="primary"
-            size="small"
-            @click="openDialog(id)"
-            class="mr1"
+              type="primary"
+              size="small"
+              @click="openDialog(id)"
+              class="mr1"
             >
               инфо
             </el-button>

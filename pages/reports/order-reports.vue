@@ -37,6 +37,44 @@
       tooltip-effect="light"
       style="width: 100%"
     >
+      <el-table-column type="expand">
+        <template slot-scope="{row}">
+          <el-table
+            :data="JSON.parse(row.products)"
+            tooltip-effect="light"
+            style="width: 100%"
+          >
+            <el-table-column
+              prop="name"
+              size="small"
+              label="Товар"
+              min-width="250"
+              show-overflow-tooltip
+            />
+            <el-table-column
+              prop="amount"
+              label="Кол-во"
+              align="center"
+            />
+            <el-table-column
+              label="Цена за единицу"
+              align="center"
+            >
+              <template slot-scope="{row: {price}}">
+                {{ formatCurrency(price) }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="Общая сумма"
+              align="right"
+            >
+              <template slot-scope="{row: {price, amount}}">
+                {{ formatCurrency(price*amount) }}
+              </template>
+            </el-table-column>
+          </el-table>
+        </template>
+      </el-table-column>
       <el-table-column
         sortable
         width="200"
@@ -134,20 +172,43 @@ export default {
       })
     },
     exportToXExcel() {
-        const filename = `Отчет по заказам - ${moment(new Date()).format('DD.MM.YYYY')}.xlsx`;
-        const data = this.data.map(item => {
-          return {
-            'Дата': item.createdAt,
-            '№ заказа': item.id,
-            'Количество': item.total,
-            'Общая сумма': item.amount,
-            'Форма оплата': item.orderType
-          }
-        });
-        var ws = XLSX.utils.json_to_sheet(Object.values(data));
-        var wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "People");
-        XLSX.writeFile(wb,filename);
+      const data = []
+      let mergedColumns = []
+      let lastIndex = 0
+      this.content.forEach((item, ind) => {
+        if (item.products) {
+          const products = JSON.parse(item.products)
+          products.forEach(product => {
+            data.push({
+              'Дата': item.createdAt,
+              '№ заказа': item.id,
+              'Форма оплата': item.orderType,
+              'Наименования товар': product.name,
+              'Цена за единицу': product.price,
+              'Количество': this.formatCurrency(product.amount),
+              'Общая сумма': this.formatCurrency(product.price * product.amount),
+            })
+          })
+          
+          const cols = this.getMergedColumnsWithProductsLength(lastIndex, products.length )
+          lastIndex += products.length 
+          mergedColumns =  mergedColumns.concat(cols)
+          
+        }
+      })
+      const filename = `Отчет по клиентам - ${moment(new Date()).format('DD.MM.YYYY')}.xlsx`;
+      var ws = XLSX.utils.json_to_sheet(data);
+      var wb = XLSX.utils.book_new();
+      ws["!merges"] = mergedColumns;
+      XLSX.utils.book_append_sheet(wb, ws, "People");
+      XLSX.writeFile(wb,filename);
+    },
+    getMergedColumnsWithProductsLength(lastIndex, length) {
+      return [
+        { s: { r: lastIndex + 1, c: 0 }, e: { r: lastIndex + length, c: 0 } },
+        { s: { r: lastIndex +1, c: 1 }, e: { r: lastIndex + length, c: 1 } },
+        { s: { r: lastIndex +1, c: 2 }, e: { r: lastIndex + length, c: 2 } }
+      ]
     },
     async searchitems() {
       if (!this.dateRanges || !this.dateRanges.length) {
