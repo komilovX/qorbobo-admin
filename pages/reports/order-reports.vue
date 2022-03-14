@@ -185,8 +185,8 @@ export default {
               'Форма оплата': item.orderType,
               'Наименования товар': product.name,
               'Цена за единицу': product.price,
-              'Количество': this.formatCurrency(product.amount),
-              'Общая сумма': this.formatCurrency(product.price * product.amount),
+              'Количество': product.amount,
+              'Общая сумма': product.price * product.amount,
             })
           })
           
