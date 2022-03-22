@@ -110,7 +110,7 @@
               </div>
               <div class="p1 df">
                 <b class="mr1">Итого: </b>
-                {{ formatCurrency(row.total) }} sum
+                {{ row.orderType === 'payme' ? formatCurrency(getTotal(row)) : formatCurrency(row.total) }} sum
               </div>
             </template>
           </el-table-column>
@@ -487,6 +487,16 @@ export default {
         }
       } else {
         this.$message.error("Выберите курьера");
+      }
+    },
+    getTotal(order) {
+      if (order && order.products) {
+        return JSON.parse(order.products).reduce(
+            (acc, val) => acc + Number(val.amount * val.price),
+            0
+          ) + order.delivery;
+      } else {
+        return 0
       }
     },
     submitForm(formName) {
